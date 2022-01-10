@@ -238,6 +238,7 @@ export * from './server/middleware/CorsHandler';
 export * from './server/middleware/HeaderHandler';
 export * from './server/middleware/StaticAssetHandler';
 export * from './server/middleware/WebSocketAdvertiser';
+export * from './server/middleware/MetricHandler';
 
 // Server/Util
 export * from './server/util/RedirectAllHttpHandler';
@@ -336,6 +337,7 @@ export * from './util/handlers/BooleanHandler';
 export * from './util/handlers/ConditionalHandler';
 export * from './util/handlers/ParallelHandler';
 export * from './util/handlers/SequenceHandler';
+export * from './util/handlers/NoSequenceHandler';
 export * from './util/handlers/StaticHandler';
 export * from './util/handlers/UnionHandler';
 export * from './util/handlers/UnsupportedAsyncHandler';

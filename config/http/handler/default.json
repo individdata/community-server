@@ -21,6 +21,11 @@
           ]
         }
       ]
+    }, 
+    {
+      "comment": "Metric Heandler.",
+      "@id": "urn:solid-server:default:MetricHandler",
+      "@type": "MetricHandler"
     }
   ]
 }

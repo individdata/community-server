@@ -12,6 +12,12 @@
       "@type": "SequenceHandler",
       "handlers": [
         {
+          "@type": "NoSequenceHandler",
+          "handlers": [
+            { "@id": "urn:solid-server:default:MetricHandler" }
+          ]
+        },
+        {
           "comment": "These handlers can be executed in any order.",
           "@id": "urn:solid-server:default:ParallelMiddleware",
           "@type": "ParallelHandler",

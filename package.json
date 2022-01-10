@@ -76,6 +76,8 @@
   ],
   "dependencies": {
     "@comunica/actor-init-sparql": "^1.21.3",
+    "@opentelemetry/exporter-prometheus": "^0.27.0",
+    "@opentelemetry/sdk-metrics-base": "^0.27.0",
     "@rdfjs/data-model": "^1.2.0",
     "@solid/access-token-verifier": "^1.0.1",
     "@types/arrayify-stream": "^1.0.0",
@@ -116,6 +118,8 @@
     "n3": "^1.10.0",
     "nodemailer": "^6.6.2",
     "oidc-provider": "^6.31.1",
+    "prom-client": "^14.0.1",
+    "prometheus-client": "^0.1.1",
     "pump": "^3.0.0",
     "punycode": "^2.1.1",
     "rdf-parse": "^1.8.1",
