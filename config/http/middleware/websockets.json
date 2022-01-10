@@ -12,16 +12,11 @@
       "@type": "SequenceHandler",
       "handlers": [
         {
-          "@type": "NoSequenceHandler",
-          "handlers": [
-            { "@id": "urn:solid-server:default:MetricHandler" }
-          ]
-        },
-        {
           "comment": "These handlers can be executed in any order.",
           "@id": "urn:solid-server:default:ParallelMiddleware",
           "@type": "ParallelHandler",
           "handlers": [
+            { "@id": "urn:solid-server:default:MetricHandler" },
             { "@id": "urn:solid-server:default:Middleware_Header" },
             { "@id": "urn:solid-server:default:Middleware_WebSocket" }
           ]
