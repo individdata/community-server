@@ -7,25 +7,23 @@
     {
       "comment": "These are all the handlers a request will go through until it is handled.",
       "@id": "urn:solid-server:default:HttpHandler",
-      "@type": "SequenceHandler",
-      "handlers": [
-        { "@id": "urn:solid-server:default:Middleware" },
-        {
-          "@type": "WaterfallHandler",
-          "handlers": [
-            { "@id": "urn:solid-server:default:StaticAssetHandler" },
-            { "@id": "urn:solid-server:default:SetupHandler" },
-            { "@id": "urn:solid-server:default:AuthResourceHttpHandler" },
-            { "@id": "urn:solid-server:default:IdentityProviderHandler" },
-            { "@id": "urn:solid-server:default:LdpHandler" }
-          ]
-        }
-      ]
-    }, 
-    {
-      "comment": "Metric Heandler.",
-      "@id": "urn:solid-server:default:MetricHandler",
-      "@type": "MetricHandler"
+      "@type": "MetricHandler",
+      "handler": {
+        "@type": "SequenceHandler",
+        "handlers": [
+          { "@id": "urn:solid-server:default:Middleware" },
+          {
+            "@type": "WaterfallHandler",
+            "handlers": [
+              { "@id": "urn:solid-server:default:StaticAssetHandler" },
+              { "@id": "urn:solid-server:default:SetupHandler" },
+              { "@id": "urn:solid-server:default:AuthResourceHttpHandler" },
+              { "@id": "urn:solid-server:default:IdentityProviderHandler" },
+              { "@id": "urn:solid-server:default:LdpHandler" }
+            ]
+          }
+        ]
+      }
     }
   ]
 }

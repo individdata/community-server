@@ -16,7 +16,6 @@
           "@id": "urn:solid-server:default:ParallelMiddleware",
           "@type": "ParallelHandler",
           "handlers": [
-            { "@id": "urn:solid-server:default:MetricHandler" },
             { "@id": "urn:solid-server:default:Middleware_Header" },
             { "@id": "urn:solid-server:default:Middleware_WebSocket" }
           ]
