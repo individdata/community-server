@@ -7,25 +7,31 @@
     {
       "comment": "These are all the handlers a request will go through until it is handled.",
       "@id": "urn:solid-server:default:HttpHandler",
-      "@type": "SequenceHandler",
-      "handlers": [
-        { "@id": "urn:solid-server:default:Middleware" },
-        {
-          "@type": "WaterfallHandler",
-          "handlers": [
-            { "@id": "urn:solid-server:default:StaticAssetHandler" },
-            { "@id": "urn:solid-server:default:SetupHandler" },
-            { "@id": "urn:solid-server:default:AuthResourceHttpHandler" },
-            { "@id": "urn:solid-server:default:IdentityProviderHandler" },
-            { "@id": "urn:solid-server:default:LdpHandler" }
-          ]
-        }
-      ]
-    }, 
-    {
-      "comment": "Metric Heandler.",
-      "@id": "urn:solid-server:default:MetricHandler",
-      "@type": "MetricHandler"
+      "@type": "MetricHandler",
+      "args_wrappedHandler": {
+        "@type": "SequenceHandler",
+        "handlers": [
+          { "@id": "urn:solid-server:default:Middleware" },
+          {
+            "@type": "WaterfallHandler",
+            "handlers": [
+              { "@id": "urn:solid-server:default:StaticAssetHandler" },
+              { "@id": "urn:solid-server:default:SetupHandler" },
+              { "@id": "urn:solid-server:default:AuthResourceHttpHandler" },
+              { "@id": "urn:solid-server:default:IdentityProviderHandler" },
+              { "@id": "urn:solid-server:default:LdpHandler" }
+            ]
+          }
+        ]
+      },
+      "args_histogram_name": "http_request_duration_seconds",
+      "args_histogram_help": "Duration of HTTP requests in seconds",
+      "args_histogram_labelNames": [ "method", "route", "code" ],
+      "args_summary_name": "http_request_duration_summary_seconds",
+      "args_summary_help": "Quantiles of HTTP requests in seconds",
+      "args_summary_labelNames": [ "method", "route" ],
+      "args_summary_maxAgeSeconds": 60,
+      "args_summary_ageBuckets": 5
     }
   ]
 }
