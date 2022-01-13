@@ -46,9 +46,7 @@ export class MetricHandler extends HttpHandler {
     } else {
       const endHistogram = this.histogram.startTimer();
       const endSummary = this.summary.startTimer();
-
       await this.wrappedHandler.handle(input);
-
       const url = request.url!;
       const arr = url.split('/');
       const path = url.startsWith('http') ? arr[3] : arr[1];
