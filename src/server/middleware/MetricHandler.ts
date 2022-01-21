@@ -1,4 +1,4 @@
-import { Registry, Histogram, Summary } from 'prom-client';
+import { Registry, Histogram, Summary, register } from 'prom-client';
 import { HttpHandler } from '../HttpHandler';
 import type { HttpHandlerInput } from '../HttpHandler';
 
@@ -53,5 +53,6 @@ export class MetricHandler extends HttpHandler {
       endHistogram({ route: path, code: response.statusCode, method: request.method });
       endSummary({ route: path, method: request.method });
     }
+    register.clear();
   }
 }
