@@ -6,9 +6,12 @@ import type { InteractionResponseResult, InteractionHandlerInput, InteractionCom
 import { InteractionHandler } from '../../email-password/handler/InteractionHandler';
 import { BankIdClient } from './BankIDClient';
 import { RegistrationManager } from '../../email-password/util/RegistrationManager';
+import type { AccountStore } from '../../email-password/storage/AccountStore';
+import { hash } from 'bcrypt';
 
 export interface BankIDHandlerArgs {
   registrationManager: RegistrationManager;
+  accountStore: AccountStore;
   production: boolean;
   pfxPath: string;
   caPath: string;
@@ -22,12 +25,15 @@ export class BankIDHandler extends InteractionHandler {
   protected readonly logger = getLoggerFor(this);
 
   private readonly registrationManager: RegistrationManager;
+  
+  private readonly accountStore: AccountStore;
 
   private readonly client: BankIdClient;
 
   public constructor(args: BankIDHandlerArgs) {
     super();
     this.registrationManager = args.registrationManager;
+    this.accountStore = args.accountStore;
     this.client = new BankIdClient({
       production: args.production,
       pfx: args.pfxPath,
@@ -38,15 +44,15 @@ export class BankIDHandler extends InteractionHandler {
 
   public async handle({ operation }: InteractionHandlerInput): Promise<InteractionCompleteResult | InteractionResponseResult> {
     // Validate input data
-    const { pno } = await readJsonStream(operation.body.data);
+    const { pno: inputPno } = await readJsonStream(operation.body.data);
     assert(
-      typeof pno === 'string' && pno.length === 12,
+      typeof inputPno === 'string' && inputPno.length === 12,
       'Invalid request. The ssn/pno must be format YYYYMMDDXXXX',
     );
 
     // Initiate and wait for BankID authentication completion
     const { completionData } = await this.client.authenticateAndCollect({
-      personalNumber: pno,
+      personalNumber: inputPno,
       endUserIp: "127.0.0.1",
     });
 
@@ -55,13 +61,13 @@ export class BankIDHandler extends InteractionHandler {
     }
 
     const { user } = completionData;
-    const { name } = user;
+    const { name, personalNumber: pno } = user;
 
     const validated =  {
-      email: 'user@example.com',
-      webId: 'http://localhost:3000/user/profile/card#me',
-      password: 'user',
-      podName: 'user',
+      email: `${pno}@example.com`,
+      // webId: 'http://localhost:3000/user/profile/card#me',
+      password: 'test',
+      podName: pno,
       // template?: string,
       createWebId: true,
       register: true,
@@ -74,11 +80,13 @@ export class BankIDHandler extends InteractionHandler {
       throw new InternalServerError('Authentication failed, could not get WebID from registration');
     }
     
-    return { type: 'response', details: { name } };
+    const webId = await this.accountStore.authenticate(validated.email, validated.password);
     
-    /* return {
+    // return { type: 'response', details: { name } };
+    
+    return {
       type: 'complete',
-      details: { webId: details.webId, shouldRemember: false },
-    }; */
+      details: { webId, shouldRemember: false },
+    };
   }
 }

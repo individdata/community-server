@@ -1,5 +1,5 @@
 <h1>Log in with BankID</h1>
-<form method="post">
+<form method="post" id="form">
   <% prefilled = locals.prefilled || {}; %>
 
   <% if (locals.message) { %>
@@ -16,5 +16,16 @@
     </ol>
   </fieldset>
 
-  <p class="actions"><button type="submit" name="submit">Log in</button></p>
+  <p class="actions"><button type="submit" name="submit" onclick="awaitCollection();">Log in</button></p>
 </form>
+
+<div id="await-collection" style="display: none">
+  <p>Start your BankID application to complete your login.</p>
+</div>
+
+<script>
+  function awaitCollection() {
+    document.getElementById("form").style.display = "none";
+    document.getElementById("await-collection").style.display = "block";
+  }
+</script>

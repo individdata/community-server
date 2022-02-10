@@ -9,15 +9,28 @@
       "prompt": "login",
       "viewTemplates": {
         "BasicInteractionRoute:_viewTemplates_key": "text/html",
-        "BasicInteractionRoute:_viewTemplates_value": "@css:templates/identity/email-password/login.html.ejs"
+        "BasicInteractionRoute:_viewTemplates_value": "@css:templates/identity/bankid/login.html.ejs"
       },
-      "controls": {
-        "BasicInteractionRoute:_controls_key": "login",
-        "BasicInteractionRoute:_controls_value": "/login/"
+      "responseTemplates": {
+        "BasicInteractionRoute:_responseTemplates_key": "text/html",
+        "BasicInteractionRoute:_responseTemplates_value": "@css:templates/identity/bankid/login-response.html.ejs"
       },
       "handler": {
-        "@type": "LoginHandler",
-        "accountStore": { "@id": "urn:solid-server:auth:password:AccountStore" }
+        "@type": "BankIDHandler",
+        "args_registrationManager": {
+          "@type": "RegistrationManager",
+          "args_baseUrl": { "@id": "urn:solid-server:default:variable:baseUrl" },
+          "args_webIdSuffix": "/profile/card#me",
+          "args_identifierGenerator": { "@id": "urn:solid-server:default:IdentifierGenerator" },
+          "args_ownershipValidator": { "@id": "urn:solid-server:auth:password:OwnershipValidator" },
+          "args_accountStore": { "@id": "urn:solid-server:auth:password:AccountStore" },
+          "args_podManager": { "@id": "urn:solid-server:default:PodManager" }
+        },
+        "args_accountStore": { "@id": "urn:solid-server:auth:password:AccountStore" },
+        "args_production": false,
+        "args_pfxPath": "C:/Project/individdata/oak/community-server-individdata/cert/FPTestcert3_20200618.p12",
+        "args_caPath": "C:/Project/individdata/oak/community-server-individdata/cert/test.ca",
+        "args_passphrase": "qwerty123"
       }
     }
   ]
