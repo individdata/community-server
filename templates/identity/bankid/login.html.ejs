@@ -1,0 +1,20 @@
+<h1>Log in with BankID</h1>
+<form method="post">
+  <% prefilled = locals.prefilled || {}; %>
+
+  <% if (locals.message) { %>
+    <p class="error"><%= message %></p>
+  <% } %>
+
+  <fieldset>
+    <legend>Your account</legend>
+    <ol>
+      <li>
+        <label for="pno">Social security number</label>
+        <input id="pno" type="text" name="pno" autofocus value="<%= prefilled.pno || '' %>">
+      </li>
+    </ol>
+  </fieldset>
+
+  <p class="actions"><button type="submit" name="submit">Log in</button></p>
+</form>

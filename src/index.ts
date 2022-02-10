@@ -124,6 +124,9 @@ export * from './http/UnsecureWebSocketsProtocol';
 export * from './identity/configuration/IdentityProviderFactory';
 export * from './identity/configuration/ProviderFactory';
 
+// Identity/Interaction/BankID/Handler
+export * from './identity/interaction/bankid/handler/BankIDHandler';
+
 // Identity/Interaction/Email-Password/Handler
 export * from './identity/interaction/email-password/handler/InteractionHandler';
 export * from './identity/interaction/email-password/handler/ForgotPasswordHandler';

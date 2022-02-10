@@ -1,0 +1,36 @@
+{
+    "@context": "https://linkedsoftwaredependencies.org/bundles/npm/@solid/community-server/^2.0.0/components/context.jsonld",
+    "@graph": [
+        {
+            "comment": "Handles the BankID interaction to complete a login",
+            "@id": "urn:solid-server:auth:BankIDRoute",
+            "@type": "BasicInteractionRoute",
+            "route": "^/bankid/$",
+            "viewTemplates": {
+              "BasicInteractionRoute:_viewTemplates_key": "text/html",
+              "BasicInteractionRoute:_viewTemplates_value": "@css:templates/identity/bankid/login.html.ejs"
+            },
+            "responseTemplates": {
+              "BasicInteractionRoute:_responseTemplates_key": "text/html",
+              "BasicInteractionRoute:_responseTemplates_value": "@css:templates/identity/bankid/login-response.html.ejs"
+            },
+            "handler": {
+              "@type": "BankIDHandler",
+              "args_registrationManager": {
+                "@type": "RegistrationManager",
+                "args_baseUrl": { "@id": "urn:solid-server:default:variable:baseUrl" },
+                "args_webIdSuffix": "/profile/card#me",
+                "args_identifierGenerator": { "@id": "urn:solid-server:default:IdentifierGenerator" },
+                "args_ownershipValidator": { "@id": "urn:solid-server:auth:password:OwnershipValidator" },
+                "args_accountStore": { "@id": "urn:solid-server:auth:password:AccountStore" },
+                "args_podManager": { "@id": "urn:solid-server:default:PodManager" }
+              },
+              "args_production": false,
+              "args_pfxPath": "C:/Project/individdata/oak/community-server-individdata/cert/FPTestcert3_20200618.p12",
+              "args_caPath": "C:/Project/individdata/oak/community-server-individdata/cert/test.ca",
+              "args_passphrase": "qwerty123"
+            }
+        }
+    ]
+  }
+  
