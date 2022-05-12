@@ -13,6 +13,7 @@ import type { Subscription } from '../SubscriptionHandler';
 export interface WebHookSubscription2021 extends Subscription {
   id: string;
   target: string;
+  topic: string;
 }
 
 export interface WebHookSubscription2021Args {
@@ -53,6 +54,7 @@ export class WebHookSubscription2021Handler extends BaseSubscriptionHandler {
       type: this.getType(),
       target: request.target,
       id: encodeURIComponent(`${request.topic}~~~${v4()}`),
+      topic: request.topic,
     };
     return subscription;
   }
@@ -112,7 +114,7 @@ export class WebHookSubscription2021Handler extends BaseSubscriptionHandler {
     resource: ResourceIdentifier,
     subscription: Subscription,
   ): Promise<void> {
-    const { target, id } = subscription as WebHookSubscription2021;
+    const { target, id, topic } = subscription as WebHookSubscription2021;
 
     const payload = {
       '@context': [
@@ -122,6 +124,7 @@ export class WebHookSubscription2021Handler extends BaseSubscriptionHandler {
       id: `urn:uuid:${v4()}`,
       type: [ type ],
       object: {
+        topic,
         id: resource.path,
       },
       published: new Date().toISOString(),
