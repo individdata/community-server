@@ -11,7 +11,7 @@ import type { Account,
   KoaContextWithOIDC,
   ResourceServer,
   UnknownObject } from 'oidc-provider';
-import { Provider } from 'oidc-provider';
+import { Provider, interactionPolicy } from 'oidc-provider';
 import type { Operation } from '../../http/Operation';
 import type { ErrorHandler } from '../../http/output/error/ErrorHandler';
 import type { ResponseWriter } from '../../http/output/ResponseWriter';
@@ -295,6 +295,33 @@ export class IdentityProviderFactory implements ProviderFactory {
         throw new InternalServerError('Could not correctly redirect for the given interaction.');
       },
     };
+
+    // Create the Policy
+    const basePolicy = interactionPolicy.base();
+    config.interactions.policy = [
+      new interactionPolicy.Prompt(
+        { name: 'switchaccount', requestable: true },
+        (): UnknownObject => ({
+          foo: 'bar',
+        }),
+        new interactionPolicy.Check(
+          'active_session',
+          'The End User has an active session and has not been asked to switch accounts yet',
+          async(ctx): Promise<boolean> => {
+            console.log('Prompt');
+            console.log(ctx.oidc.params);
+            console.log(ctx.oidc.session);
+            const hasBeenAskedToSwitchAccounts = ctx.oidc.params?.hasBeenAskedToSwitchAccounts as boolean | undefined;
+            if (ctx.oidc.session?.authorizations) {
+              return true;
+            }
+            return false;
+          },
+        ),
+      ),
+      basePolicy.get('login')!,
+      basePolicy.get('consent')!,
+    ];
 
     config.routes = {
       authorization: this.createRoute('auth'),

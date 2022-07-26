@@ -171,6 +171,7 @@ export * from './identity/interaction/HtmlViewHandler';
 export * from './identity/interaction/InteractionHandler';
 export * from './identity/interaction/LocationInteractionHandler';
 export * from './identity/interaction/PromptHandler';
+export * from './identity/interaction/SwitchAccountHandler';
 
 // Identity/Ownership
 export * from './identity/ownership/NoCheckOwnershipValidator';
