@@ -311,11 +311,19 @@ export class IdentityProviderFactory implements ProviderFactory {
             console.log('Prompt');
             console.log(ctx.oidc.params);
             console.log(ctx.oidc.session);
-            const hasBeenAskedToSwitchAccounts = ctx.oidc.params?.hasBeenAskedToSwitchAccounts as boolean | undefined;
-            if (ctx.oidc.session?.authorizations) {
-              return true;
+            console.log(ctx.oidc.result);
+            // return Boolean(ctx.oidc.session?.accountId);
+            if (ctx.oidc.entities.Interaction) {
+              const oidcInteraction = ctx.oidc.entities.Interaction;
+              oidcInteraction.result = {
+                ...oidcInteraction.lastSubmission,
+                hasAskedToSwitchAccount: true,
+              };
+              await oidcInteraction.save(oidcInteraction.exp - Math.floor(Date.now() / 1000));
             }
-            return false;
+            // Prompt if the IDP remembered the user AND hasAskedToSwitchAccount is not present
+            return Boolean(ctx.oidc.session?.authorizations) &&
+              Boolean(!ctx.oidc.result || !ctx.oidc.result.hasAskedToSwitchAccount);
           },
         ),
       ),

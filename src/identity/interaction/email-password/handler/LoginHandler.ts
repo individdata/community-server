@@ -63,7 +63,7 @@ export class LoginHandler extends BaseInteractionHandler {
       accountId: webId,
       remember,
     };
-    oidcInteraction!.result = { login };
+    oidcInteraction!.result = { login, hasAskedToSwitchAccount: true };
     await oidcInteraction!.save(oidcInteraction!.exp - Math.floor(Date.now() / 1000));
 
     throw new FoundHttpError(oidcInteraction!.returnTo);

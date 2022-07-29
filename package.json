@@ -42,6 +42,7 @@
   },
   "homepage": "https://github.com/CommunitySolidServer/CommunitySolidServer#readme",
   "scripts": {
+    "temp": "npm start -- -c @css:config/file.json -f ./data",
     "build": "npm run build:ts && npm run build:components",
     "build:components": "componentsjs-generator -s src -c dist/components -r scs -i .componentsignore --typeScopedContexts",
     "build:ts": "tsc",

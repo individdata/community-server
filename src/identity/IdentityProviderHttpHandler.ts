@@ -1,3 +1,4 @@
+import type { Provider } from 'oidc-provider';
 import { OkResponseDescription } from '../http/output/response/OkResponseDescription';
 import type { ResponseDescription } from '../http/output/response/ResponseDescription';
 import { getLoggerFor } from '../logging/LogUtil';
@@ -50,9 +51,10 @@ export class IdentityProviderHttpHandler extends OperationHttpHandler {
 
   public async handle({ operation, request, response }: OperationHttpHandlerInput): Promise<ResponseDescription> {
     // This being defined means we're in an OIDC session
+    let provider: Provider | undefined;
     let oidcInteraction: Interaction | undefined;
     try {
-      const provider = await this.providerFactory.getProvider();
+      provider = await this.providerFactory.getProvider();
       oidcInteraction = await provider.interactionDetails(request, response);
       this.logger.debug('Found an active OIDC interaction.');
     } catch {

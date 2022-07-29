@@ -3,7 +3,13 @@
   <form method="post" id="mainForm">
     <p class="actions"></p>
       <button type="submit" name="operation" value="continue">Continue</button>
-      <button type="submit" name="operation" value="switchaccount">Switch Account</button>
+      <!--<button type="submit" name="operation" value="switchaccount">Switch Account</button>-->
+      <a href="http://localhost:3000/idp/login/">Switch Accounts</a>
     </p>
   </form>
 </div>
+
+
+<script>
+  addPostListener('mainForm', 'error', '', () => { throw new Error('Expected a location field in the response.') });
+</script>

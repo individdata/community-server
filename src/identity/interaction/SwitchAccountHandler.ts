@@ -37,15 +37,17 @@ export class SwitchAccountHandler extends BaseInteractionHandler {
 
   public async handlePost({ operation, oidcInteraction }: InteractionHandlerInput): Promise<never> {
     const shouldSwitchAccount = await this.parseInput(operation);
-    if (shouldSwitchAccount) {
-      delete oidcInteraction!.result;
-    }
-    if (!oidcInteraction!.params) {
-      oidcInteraction!.params = {};
-    }
-    oidcInteraction!.params.hasBeenAskedToSwitchAccounts = true;
-    await oidcInteraction!.save(oidcInteraction!.exp - Math.floor(Date.now() / 1000));
 
+    oidcInteraction!.result = {
+      ...oidcInteraction!.lastSubmission,
+      hasAskedToSwitchAccount: true,
+    };
+    if (shouldSwitchAccount) {
+      delete oidcInteraction!.result.login;
+    }
+    console.log('NahNah');
+    console.log(oidcInteraction!.result);
+    await oidcInteraction!.save(oidcInteraction!.exp - Math.floor(Date.now() / 1000));
     throw new FoundHttpError(oidcInteraction!.returnTo);
   }
 
@@ -55,6 +57,7 @@ export class SwitchAccountHandler extends BaseInteractionHandler {
    */
   private async parseInput(operation: Operation): Promise<boolean> {
     const json = await readJsonStream(operation.body.data);
+    console.log(json);
     return json.operation !== 'continue';
   }
 }
