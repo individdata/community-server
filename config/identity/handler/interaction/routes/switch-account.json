@@ -14,7 +14,7 @@
       "source": {
         "@id": "urn:solid-server:auth:password:SwitchAccountHandler",
         "@type": "SwitchAccountHandler",
-        "loginInteractionHandler": { "@id": "urn:solid-server:auth:password:LoginHandler" }
+        "loginHandler": { "@id": "urn:solid-server:auth:password:LoginHandler" }
       }
     }
   ]

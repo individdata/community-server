@@ -24,6 +24,7 @@ import type { ClientCredentials } from '../interaction/email-password/credential
 import type { InteractionHandler } from '../interaction/InteractionHandler';
 import type { AdapterFactory } from '../storage/AdapterFactory';
 import type { ProviderFactory } from './ProviderFactory';
+import { switchAccountPrompt } from './switchAccountPrompt';
 
 export interface IdentityProviderFactoryArgs {
   /**
@@ -299,30 +300,7 @@ export class IdentityProviderFactory implements ProviderFactory {
     // Create the Policy
     const basePolicy = interactionPolicy.base();
     config.interactions.policy = [
-      new interactionPolicy.Prompt(
-        { name: 'switchaccount', requestable: true },
-        (): UnknownObject => ({
-          foo: 'bar',
-        }),
-        new interactionPolicy.Check(
-          'active_session',
-          'The End User has an active session and has not been asked to switch accounts yet',
-          async(ctx): Promise<boolean> => {
-            // return Boolean(ctx.oidc.session?.accountId);
-            if (ctx.oidc.entities.Interaction) {
-              const oidcInteraction = ctx.oidc.entities.Interaction;
-              oidcInteraction.result = {
-                ...oidcInteraction.lastSubmission,
-                hasAskedToSwitchAccount: true,
-              };
-              await oidcInteraction.save(oidcInteraction.exp - Math.floor(Date.now() / 1000));
-            }
-            // Prompt if the IDP remembered the user AND hasAskedToSwitchAccount is not present
-            return Boolean(ctx.oidc.session?.authorizations) &&
-              Boolean(!ctx.oidc.result || !ctx.oidc.result.hasAskedToSwitchAccount);
-          },
-        ),
-      ),
+      switchAccountPrompt,
       basePolicy.get('login')!,
       basePolicy.get('consent')!,
     ];

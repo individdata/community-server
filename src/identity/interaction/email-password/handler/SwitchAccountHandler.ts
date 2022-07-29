@@ -1,4 +1,4 @@
-import { assert } from 'console';
+import assert from 'assert';
 import type { Operation } from '../../../../http/Operation';
 import { getLoggerFor } from '../../../../logging/LogUtil';
 import { BadRequestHttpError } from '../../../../util/errors/BadRequestHttpError';
@@ -42,7 +42,7 @@ export class SwitchAccountHandler extends BaseInteractionHandler {
   }
 
   public async handlePost({ operation, oidcInteraction }: InteractionHandlerInput): Promise<never> {
-    const input = await this.shouldSwitchAccount(operation);
+    const input = await this.parseInput(operation);
 
     if (input.continueWithCurrentLogin) {
       oidcInteraction!.result = {
@@ -67,7 +67,7 @@ export class SwitchAccountHandler extends BaseInteractionHandler {
    * Validates the input data. Also makes sure remember is a boolean.
    * Will throw an error in case something is wrong.
    */
-  private async shouldSwitchAccount(operation: Operation): Promise<SwitchAccountInput> {
+  private async parseInput(operation: Operation): Promise<SwitchAccountInput> {
     const { email, password, remember, continueWithCurrentLogin } = await readJsonStream(operation.body.data);
     if (continueWithCurrentLogin === 'true') {
       return { continueWithCurrentLogin: true };

@@ -135,8 +135,6 @@ export class ConsentHandler extends BaseInteractionHandler {
 
     // Need to merge with previous submission
     oidcInteraction.result = { ...oidcInteraction.lastSubmission, ...result };
-    // @ts-ignore
-    delete oidcInteraction.session.accountId;
     await oidcInteraction.save(oidcInteraction.exp - Math.floor(Date.now() / 1000));
 
     return oidcInteraction.returnTo;
