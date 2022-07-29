@@ -308,10 +308,6 @@ export class IdentityProviderFactory implements ProviderFactory {
           'active_session',
           'The End User has an active session and has not been asked to switch accounts yet',
           async(ctx): Promise<boolean> => {
-            console.log('Prompt');
-            console.log(ctx.oidc.params);
-            console.log(ctx.oidc.session);
-            console.log(ctx.oidc.result);
             // return Boolean(ctx.oidc.session?.accountId);
             if (ctx.oidc.entities.Interaction) {
               const oidcInteraction = ctx.oidc.entities.Interaction;
