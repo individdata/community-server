@@ -1,5 +1,8 @@
 # Community Solid Server release notes
 
+## v4.1.0
+Adds a "Switch User" page to the login flow.
+
 ## v4.0.1
 Freezes the `oidc-provider` dependency to prevent a potential issue with the solid authn client
 as described in https://github.com/inrupt/solid-client-authn-js/issues/2103.
