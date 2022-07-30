@@ -1,5 +1,5 @@
 <div id="switchAccount">
-  <p>You are logged in as <strong>https://localhost:3000/jackson/profile/card#me</strong>.</p>
+  <p id="loginMessage"></p>
   <form method="post" id="switchAccountForm">
     <p class="actions"></p>
       <input type="hidden" name="continueWithCurrentLogin", value="true" />
@@ -46,6 +46,18 @@
     setVisibility('switchAccount', false);
     setVisibility('login', true);
   }
+
+  // Update the login information
+  (async() => {
+    const res = await fetch('', { headers: { accept: 'application/json' } })
+    const { webId } = await res.json();
+
+    const strong = document.createElement('strong');
+    strong.appendChild(document.createTextNode(webId));
+    const p = document.getElementById('loginMessage');
+    p.appendChild(document.createTextNode('You are logged in as '));
+    p.append(strong);
+  })()
 
   addPostListener('switchAccountForm', 'error', '', () => { throw new Error('Error in Switch Account') });
   addPostListener('loginForm', 'error', '', () => { throw new Error('Error in Login') });

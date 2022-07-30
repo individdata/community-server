@@ -1,4 +1,4 @@
-import { SwitchAccountHandler } from '../../../../../../src';
+import { readJsonStream, SwitchAccountHandler } from '../../../../../../src';
 import type { LoginHandler } from '../../../../../../src/identity/interaction/email-password/handler/LoginHandler';
 import type {
   Interaction,
@@ -19,6 +19,9 @@ describe('A SwitchAccountHandler', (): void => {
     oidcInteraction = {
       exp: 123456,
       save: jest.fn(),
+      session: {
+        accountId: webId,
+      },
     } as any;
 
     input = { oidcInteraction } as any;
@@ -71,6 +74,23 @@ describe('A SwitchAccountHandler', (): void => {
     expect(oidcInteraction.save).toHaveBeenCalledTimes(1);
     expect(oidcInteraction.result).toEqual({
       hasAskedToSwitchAccount: true,
+    });
+  });
+
+  it('returns a user webId on a GET request.', async(): Promise<void> => {
+    const operation = { method: 'GET', target: { path: 'http://example.com/foo' }} as any;
+    const representation = await handler.handle({ operation, oidcInteraction });
+    await expect(readJsonStream(representation.data)).resolves.toEqual({
+      webId,
+    });
+  });
+
+  it('does not return a webId if the user is not logged in.', async(): Promise<void> => {
+    const operation = { method: 'GET', target: { path: 'http://example.com/foo' }} as any;
+    delete oidcInteraction.session;
+    const representation = await handler.handle({ operation, oidcInteraction });
+    await expect(readJsonStream(representation.data)).resolves.toEqual({
+      webId: undefined,
     });
   });
 });

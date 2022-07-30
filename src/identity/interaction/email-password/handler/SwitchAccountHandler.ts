@@ -1,6 +1,9 @@
 import assert from 'assert';
 import type { Operation } from '../../../../http/Operation';
+import { BasicRepresentation } from '../../../../http/representation/BasicRepresentation';
+import type { Representation } from '../../../../http/representation/Representation';
 import { getLoggerFor } from '../../../../logging/LogUtil';
+import { APPLICATION_JSON } from '../../../../util/ContentTypes';
 import { BadRequestHttpError } from '../../../../util/errors/BadRequestHttpError';
 import { FoundHttpError } from '../../../../util/errors/FoundHttpError';
 import { readJsonStream } from '../../../../util/StreamUtil';
@@ -39,6 +42,14 @@ export class SwitchAccountHandler extends BaseInteractionHandler {
         { errorCode: 'E0002' },
       );
     }
+  }
+
+  protected async handleGet(input: Required<InteractionHandlerInput>): Promise<Representation> {
+    const { operation, oidcInteraction } = input;
+
+    const json = { webId: oidcInteraction.session?.accountId };
+
+    return new BasicRepresentation(JSON.stringify(json), operation.target, APPLICATION_JSON);
   }
 
   public async handlePost({ operation, oidcInteraction }: InteractionHandlerInput): Promise<never> {
